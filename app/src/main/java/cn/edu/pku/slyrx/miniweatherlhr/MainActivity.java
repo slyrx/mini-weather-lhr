@@ -32,6 +32,7 @@ import cn.edu.pku.slyrx.util.NetUtil;
  */
 public class MainActivity extends Activity implements View.OnClickListener {
     private static final int UPDATE_TODAY_WEATHER = 1;
+    private static final String TAG = "MyMainActivity";
 
     private ImageView mUpdateBtn;
     private ImageView mCitySelect;
@@ -98,6 +99,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "MainActivity->Oncreate");
+
         setContentView(R.layout.weather_info);
 
         mUpdateBtn = (ImageView) findViewById(R.id.title_update_btn);
