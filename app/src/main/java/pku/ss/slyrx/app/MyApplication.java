@@ -39,6 +39,10 @@ public class MyApplication extends Application {
         return mApplication;
     }
 
+    public static List<City> getmCityList(){
+        return mCityList;
+    }
+
     private CityDB openCityDB(){
 
         String dirpath = Environment.getExternalStorageDirectory()//.getDataDirectory().getAbsolutePath()

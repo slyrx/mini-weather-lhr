@@ -40,6 +40,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private TextView cityTv, timeTv, humidityTv, weekTv, pmDataTv, pmQualityTv, temperatureTv, climateTv, windTv, city_name_Tv, temperTodayTv;
     private ImageView weatherImg, pmImg;
 
+    private String mSelectCityNum = null;
+
     void updateTodayWeather(TodayWeather todayWeather){
         city_name_Tv.setText(todayWeather.getCity() + "天气");
         cityTv.setText(todayWeather.getCity());
@@ -132,6 +134,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if(view.getId() == R.id.title_update_btn){
             SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
             String cityCode = sharedPreferences.getString("main_city_code", "101010100");
+            if(null != mSelectCityNum) {
+                cityCode = mSelectCityNum;
+            }
             Log.d("myMiniWeather", cityCode);
 
             //检查网络是否可用
@@ -282,5 +287,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
 
         return todayWeather;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Bundle bundle = data.getBundleExtra("GetSelectCityNumber");
+        String str = bundle.getString("City");
+
+        if(101 == requestCode){
+            mSelectCityNum = str;
+        }
     }
 }

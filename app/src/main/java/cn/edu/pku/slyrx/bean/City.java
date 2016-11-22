@@ -30,4 +30,8 @@ public class City {
     public String getCity(){
         return city;
     }
+
+    public String getNumber(){
+        return number;
+    }
 }
