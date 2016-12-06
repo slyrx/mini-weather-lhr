@@ -26,6 +26,7 @@ import java.net.URL;
 
 import cn.edu.pku.slyrx.bean.TodayWeather;
 import cn.edu.pku.slyrx.util.NetUtil;
+import cn.edu.pku.slyrx.util.updateService;
 
 /**
  * Created by slyrx on 16/9/26.
@@ -41,6 +42,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private ImageView weatherImg, pmImg;
 
     private String mSelectCityNum = null;
+
+    private updateService mUpdateService = null;
 
     void updateTodayWeather(TodayWeather todayWeather){
         city_name_Tv.setText(todayWeather.getCity() + "天气");
@@ -125,6 +128,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mCitySelect.setOnClickListener(this);
 
         initView();
+
+        //开启服务，用以更新天气数据
+        mUpdateService = new updateService();
+        mUpdateService.setMain_Activity(this);
+        startService(new Intent(getBaseContext(), updateService.class));
+
     }
 
     @Override
@@ -139,23 +148,42 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
 
         if(view.getId() == R.id.title_update_btn){
-            SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
-            String cityCode = sharedPreferences.getString("main_city_code", "101010100");
-            if(null != mSelectCityNum) {
-                cityCode = mSelectCityNum;
-            }
-            Log.d("myMiniWeather", cityCode);
-
-            //检查网络是否可用
-            if(NetUtil.getNetworkState(this) != NetUtil.NETWORK_NONE){
-                Log.d("myMiniWeather", "网络ok");
-                queryWeatherCode(cityCode);
-            }else {
-                Log.d("myMiniWeather", "网络down");
-                Toast.makeText(MainActivity.this, "网络down！", Toast.LENGTH_LONG).show();
-            }
+//            SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
+//            String cityCode = sharedPreferences.getString("main_city_code", "101010100");
+//            if(null != mSelectCityNum) {
+//                cityCode = mSelectCityNum;
+//            }
+//            Log.d("myMiniWeather", cityCode);
+//
+//            //检查网络是否可用
+//            if(NetUtil.getNetworkState(this) != NetUtil.NETWORK_NONE){
+//                Log.d("myMiniWeather", "网络ok");
+//                queryWeatherCode(cityCode);
+//            }else {
+//                Log.d("myMiniWeather", "网络down");
+//                Toast.makeText(MainActivity.this, "网络down！", Toast.LENGTH_LONG).show();
+//            }
+            updateBtnRun();
         }
 
+    }
+
+    public void updateBtnRun(){
+        SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
+        String cityCode = sharedPreferences.getString("main_city_code", "101010100");
+        if(null != mSelectCityNum) {
+            cityCode = mSelectCityNum;
+        }
+        Log.d("myMiniWeather", cityCode);
+
+        //检查网络是否可用
+        if(NetUtil.getNetworkState(this) != NetUtil.NETWORK_NONE){
+            Log.d("myMiniWeather", "网络ok");
+            queryWeatherCode(cityCode);
+        }else {
+            Log.d("myMiniWeather", "网络down");
+            Toast.makeText(MainActivity.this, "网络down！", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void queryWeatherCode(String cityCode){

@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SelectCity"></activity>
-
+        <service android:name="cn.edu.pku.slyrx.util.updateService" />
     </application>
 
 </manifest>
