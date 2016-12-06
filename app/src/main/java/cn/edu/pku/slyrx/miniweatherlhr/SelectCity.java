@@ -55,6 +55,15 @@ public class SelectCity extends Activity implements View.OnClickListener{
                 //响应ListView中某一项的点击
                 //记下选择的城市，供后续主画面的显示使用, 此处需要把找到的城市信息传回给主Activity
                 mSelectCity = MyApplication.getmCityList().get(position);
+
+                //传递City信息
+                Bundle bundle = new Bundle();
+                bundle.putString("City", mSelectCity.getNumber());
+                Intent intent = new Intent();
+                intent.putExtra("GetSelectCityNumber", bundle);
+                setResult(101, intent);
+
+                finish();
             }
         });
 
@@ -66,13 +75,6 @@ public class SelectCity extends Activity implements View.OnClickListener{
     public void onClick(View v){
         switch (v.getId()){
             case R.id.title_back:
-                //传递City信息
-                Bundle bundle = new Bundle();
-                bundle.putString("City", mSelectCity.getNumber());
-                Intent intent = new Intent();
-                intent.putExtra("GetSelectCityNumber", bundle);
-                setResult(101, intent);
-
                 finish();
                 break;
             default:

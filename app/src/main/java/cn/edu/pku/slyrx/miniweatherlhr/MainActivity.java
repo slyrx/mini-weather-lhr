@@ -112,6 +112,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if(NetUtil.getNetworkState(this) != NetUtil.NETWORK_NONE){
             Log.d("myMiniWeather", "网络ok");
             Toast.makeText(MainActivity.this, "网络ok！", Toast.LENGTH_LONG).show();
+            SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
+            String cityCode = sharedPreferences.getString("main_city_code", "101010100");
+            queryWeatherCode(cityCode);
+
         }else {
             Log.d("myMiniWeather", "网络down");
             Toast.makeText(MainActivity.this, "网络down！", Toast.LENGTH_LONG).show();
@@ -127,8 +131,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View view){
 
         if(view.getId() == R.id.title_city_manager){
+
+
             Intent i = new Intent(this, SelectCity.class);
-            startActivity(i);
+            startActivityForResult(i, 110);
+
         }
 
         if(view.getId() == R.id.title_update_btn){
@@ -296,8 +303,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Bundle bundle = data.getBundleExtra("GetSelectCityNumber");
         String str = bundle.getString("City");
 
-        if(101 == requestCode){
+        if(110 == requestCode && 101 == resultCode){
             mSelectCityNum = str;
+
+            //同时更新画面
+            if(null != mSelectCityNum) {
+                queryWeatherCode(mSelectCityNum);
+            }
         }
     }
 }
