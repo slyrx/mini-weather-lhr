@@ -130,9 +130,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         initView();
 
         //开启服务，用以更新天气数据
-        mUpdateService = new updateService();
-        mUpdateService.setMain_Activity(this);
-        startService(new Intent(getBaseContext(), updateService.class));
+//        mUpdateService = new updateService();
+//        mUpdateService.setMain_Activity(this);
+//        startService(new Intent(getBaseContext(), updateService.class));
 
     }
 

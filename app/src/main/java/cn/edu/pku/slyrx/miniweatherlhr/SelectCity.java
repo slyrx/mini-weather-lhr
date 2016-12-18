@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,9 +26,10 @@ import pku.ss.slyrx.app.MyApplication;
 /**
  * Created by slyrx on 16/10/18.
  */
-public class SelectCity extends Activity implements View.OnClickListener{
+public class SelectCity extends Activity implements View.OnClickListener, SearchView.OnQueryTextListener {
     private ImageView mBackBtn;
     private ListView mListView;
+    private SearchView mSearchView;
     private City mSelectCity;
 
     @Override
@@ -32,6 +37,7 @@ public class SelectCity extends Activity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.select_city);
+
 
         mBackBtn = (ImageView)findViewById(R.id.title_back);
         mBackBtn.setOnClickListener(this);
@@ -54,7 +60,13 @@ public class SelectCity extends Activity implements View.OnClickListener{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //响应ListView中某一项的点击
                 //记下选择的城市，供后续主画面的显示使用, 此处需要把找到的城市信息传回给主Activity
-                mSelectCity = MyApplication.getmCityList().get(position);
+                //遍历城市list，确认匹配的城市名称
+                for(int i = 0; i < MyApplication.getmCityList().size(); i++){
+                    if(MyApplication.getmCityList().get(i).getCity().equals(((TextView)view).getText())){
+                        mSelectCity = MyApplication.getmCityList().get(i);
+                        break;
+                    }
+                }
 
                 //传递City信息
                 Bundle bundle = new Bundle();
@@ -66,6 +78,10 @@ public class SelectCity extends Activity implements View.OnClickListener{
                 finish();
             }
         });
+        mListView.setTextFilterEnabled(true);
+
+        mSearchView = (SearchView)findViewById(R.id.searchView);
+        mSearchView.setOnQueryTextListener(this);
 
     }
 
@@ -83,4 +99,19 @@ public class SelectCity extends Activity implements View.OnClickListener{
     }
 
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {//该分支目前没有走到
+        Toast.makeText(this, "您选择的是"+query, Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if(TextUtils.isEmpty(newText)){
+            mListView.clearTextFilter();
+        }else {
+            mListView.setFilterText(newText);
+        }
+        return true;
+    }
 }
