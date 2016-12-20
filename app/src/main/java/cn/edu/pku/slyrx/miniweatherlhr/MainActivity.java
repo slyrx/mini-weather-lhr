@@ -71,7 +71,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
         pmDataTv.setText(todayWeather.getPm25());
         pmQualityTv.setText(todayWeather.getQuality());
         weekTv.setText(todayWeather.getDate());
-        temperatureTv.setText(todayWeather.getHigh() + "~" + todayWeather.getLow());
+
+
+        if(todayWeather.getHigh()==null){
+
+            temperatureTv.setText(todayWeather.getLow());
+
+        }else if(todayWeather.getLow()==null){
+
+            temperatureTv.setText(todayWeather.getHigh());
+
+        }else if((todayWeather.getHigh()==null)&&(todayWeather.getLow()==null)){
+            temperatureTv.setText("当前无温度数据");
+        }else {
+            temperatureTv.setText(todayWeather.getHigh() + "~" + todayWeather.getLow());
+        }
+
         climateTv.setText(todayWeather.getType());
         windTv.setText("风力" + todayWeather.getFengli());
         Toast.makeText(MainActivity.this, "更新成功!", Toast.LENGTH_SHORT).show();
