@@ -60,6 +60,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private LocationManager mLocationManager = null;
 
+    private TodayWeather mTodayWeather;
+
     void updateTodayWeather(TodayWeather todayWeather) {
         city_name_Tv.setText(todayWeather.getCity() + "天气");
         cityTv.setText(todayWeather.getCity());
@@ -205,10 +207,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void shareToFriend(){
+        String shareWords = mTodayWeather.getCity() + " 今日" + mTodayWeather.getDate() + " 温度" + mTodayWeather.getWendu() + "度";
+
         AndroidShare as = new AndroidShare(
                 MainActivity.this,
-                "简易分享",
-                "http://img6.cache.netease.com/cnews/news2012/img/logo_news.png");
+                shareWords,
+                "文字");
         as.show();
     }
 
@@ -261,6 +265,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     todayWeather = parseXML(responseStr);
                     if (todayWeather != null) {
                         Log.d("myMiniWeather", todayWeather.toString());
+                        mTodayWeather = todayWeather;
 
                         Message msg = new Message();
                         msg.what = UPDATE_TODAY_WEATHER;
