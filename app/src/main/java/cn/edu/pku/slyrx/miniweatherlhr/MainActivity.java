@@ -2,6 +2,7 @@ package cn.edu.pku.slyrx.miniweatherlhr;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,6 +37,7 @@ import java.net.URL;
 import java.util.Iterator;
 
 import cn.edu.pku.slyrx.bean.TodayWeather;
+import cn.edu.pku.slyrx.util.AndroidShare;
 import cn.edu.pku.slyrx.util.NetUtil;
 import cn.edu.pku.slyrx.util.updateService;
 
@@ -46,7 +48,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private static final int UPDATE_TODAY_WEATHER = 1;
     private static final String TAG = "MyMainActivity";
 
-    private ImageView mUpdateBtn, mLocationBtn;
+    private ImageView mUpdateBtn, mLocationBtn, mShareBtn;
     private ImageView mCitySelect;
 
     private TextView cityTv, timeTv, humidityTv, weekTv, pmDataTv, pmQualityTv, temperatureTv, climateTv, windTv, city_name_Tv, temperTodayTv;
@@ -125,6 +127,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mUpdateBtn.setOnClickListener(this);
         mLocationBtn = (ImageView) findViewById(R.id.title_location);
         mLocationBtn.setOnClickListener(this);
+        mShareBtn = (ImageView) findViewById(R.id.title_share);
+        mShareBtn.setOnClickListener(this);
 
         //检查网络是否可用
         if (NetUtil.getNetworkState(this) != NetUtil.NETWORK_NONE) {
@@ -172,11 +176,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Location curLoc = getLocation();
                 Toast.makeText(MainActivity.this, "经度: "+ curLoc.getLatitude() + "纬度: " + curLoc.getLongitude(), Toast.LENGTH_LONG).show();
                 break;
+            case R.id.title_share:
+                shareToFriend();
+                break;
             default:
                 break;
         }
 
-        if (view.getId() == R.id.title_update_btn) {
+//        if (view.getId() == R.id.title_update_btn) {
 //            SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
 //            String cityCode = sharedPreferences.getString("main_city_code", "101010100");
 //            if(null != mSelectCityNum) {
@@ -192,9 +199,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //                Log.d("myMiniWeather", "网络down");
 //                Toast.makeText(MainActivity.this, "网络down！", Toast.LENGTH_LONG).show();
 //            }
-            updateBtnRun();
-        }
+//            updateBtnRun();
+//        }
 
+    }
+
+    private void shareToFriend(){
+        AndroidShare as = new AndroidShare(
+                MainActivity.this,
+                "简易分享",
+                "http://img6.cache.netease.com/cnews/news2012/img/logo_news.png");
+        as.show();
     }
 
     public void updateBtnRun() {
