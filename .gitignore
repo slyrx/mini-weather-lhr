@@ -12,7 +12,7 @@
 *.jks
 
 # Built application files
-*.apk
+#*.apk
 *.ap_
 
 #Java class files
